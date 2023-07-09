@@ -3,6 +3,7 @@ import './App.css';
 import { styled } from '@mui/material/styles';
 import { Typography, Button } from '@mui/material';
 import '@fontsource/roboto';
+import * as math from 'mathjs'; // Importar la librería math.js
 
 const Container = styled('div')({
   display: 'flex',
@@ -40,7 +41,7 @@ const Display = styled('div')({
   borderStyle: 'solid',
   borderColor: '#752273',
   borderRadius: '20px',
-  fontFamily: 'Montserrat, sans-serif',
+  fontFamily: 'Montserrat, sans-serif', // Establecer la fuente del display
 });
 
 const ButtonRow = styled('div')({
@@ -52,7 +53,7 @@ const CalculatorButton = styled(Button)({
   margin: '4px',
   backgroundImage: 'radial-gradient(circle at 50% -20.71%, #cbe7e1 0, #cae7e3 6.25%, #c9e7e6 12.5%, #c9e7e8 18.75%, #c9e7eb 25%, #c9e7ed 31.25%, #cae6ef 37.5%, #cbe6f1 43.75%, #cde5f2 50%, #cfe4f3 56.25%, #d1e4f4 62.5%, #d4e3f5 68.75%, #d7e2f5 75%, #dae1f5 81.25%, #dde0f4 87.5%, #e0e0f4 93.75%, #e3dff2 100%)',
   color: 'black',
-  fontFamily: 'Montserrat, sans-serif',
+  fontFamily: 'Montserrat, sans-serif', // Establecer la fuente de los botones
 });
 
 const CalculatorButtonIgual = styled(Button)({
@@ -76,10 +77,17 @@ function App() {
 
   const handleButtonClick = (buttonContent) => {
     if (buttonContent === 'AC') {
-      setDisplayContent('');
+      setDisplayContent(''); // Limpiar el contenido del display
+    } else if (buttonContent === '=') {
+      try {
+        const result = math.evaluate(displayContent); // Evaluar la expresión con math.js
+        setDisplayContent(result.toString()); // Mostrar el resultado en el display
+      } catch (error) {
+        setDisplayContent('Syntax error'); // Manejar errores de sintaxis
+      }
     } else {
-      setDisplayContent((prevContent) => prevContent + buttonContent);
-    }
+      setDisplayContent((prevContent) => prevContent + buttonContent); // Agregar el contenido al display
+    } 
   };
 
   return (
@@ -112,7 +120,7 @@ function App() {
           <CalculatorButton variant="contained" onClick={() => handleButtonClick('6')}>
             6
           </CalculatorButton>
-          <CalculatorButton variant="contained" onClick={() => handleButtonClick('x')}>
+          <CalculatorButton variant="contained" onClick={() => handleButtonClick('*')}>
             x
           </CalculatorButton>
         </ButtonRow>
